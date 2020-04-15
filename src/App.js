@@ -3,8 +3,8 @@ import React, {useState} from 'react';
 
 function App() {
 const [tasks, setTasks] = useState([
-  { id: 1, name: "do"},
-  {  id: 2, name: "doo"}
+  { id: 1, name: "test"},
+  {  id: 2, name: "test"}
 ])
 
   const renderTask = () => {
@@ -12,8 +12,7 @@ const [tasks, setTasks] = useState([
       
       return (
         <li key={index}> 
-        {' '}
-        {task.id} : {task.name} {' '}
+        {task.id} : {task.name} 
         </li>
       )
       })
