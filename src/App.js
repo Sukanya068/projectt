@@ -60,7 +60,7 @@ const App = () => {
       <h1 align = 'center'>Today's story</h1>
       <h2 align = 'center'><input type="text" name="name" onChange={(e) => setName(e.target.value)} /> 
       <button style={{ margin: '5px' }} onClick={addTask} >Submit</button> </h2>
-      <ul style={{ display: 'flex', listStyle: 'none' }} >{renderTask()}</ul>
+      <ul style={{ display: 'row' }} >{renderTask()}</ul>
     </div>
   );
 }
