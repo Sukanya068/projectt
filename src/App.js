@@ -33,7 +33,8 @@ const App = () => {
         <Task key={index}
           task={task}
           deleteTask={deleteTask}
-          editTask={editTask} />
+          editTask={editTask}
+          endTask={endTask} />
       )
       )
 
@@ -54,7 +55,7 @@ const App = () => {
   const editTask = (id) => {
     firestore.collection('tasks').doc(id + '').set({ id, name })
   }
-
+  
   return (
     <div className='app-container'>
       <h1 align = 'center'>Today's story</h1>
