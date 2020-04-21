@@ -34,7 +34,7 @@ const App = () => {
           task={task}
           deleteTask={deleteTask}
           editTask={editTask}
-          endTask={endTask} />
+           />
       )
       )
 
