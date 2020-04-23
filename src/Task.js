@@ -12,6 +12,8 @@ export default (props)=> {
                 <button className="green" onClick={ ()=> deleteTask(id)} >Delete</button>
                 <button className="red" onClick={ ()=> editTask(id)} >Edit</button>
             </div>
+            
         </li>
       )
+ 
 }

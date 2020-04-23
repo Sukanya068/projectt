@@ -1,67 +1,102 @@
-import React, { useState, useEffect } from 'react';
-import { firestore } from './index'
-import Task from './Task.js'
-import './App.css'
+import React from "react";
+import "./App.css";
+import firebase from "./firebase";
 
-const App = () => {
+import {Button,Row,Container,Col,Form,Navbar,Table} from 'react-bootstrap';
 
-  const [tasks, setTasks] = useState([
-  ])
-  const [name, setName] = useState('')
+function App() {
 
-  useEffect(() => {
-    retriveData()
-  }, [])
+  const [tasks, setTasks] = React.useState([]);
+  const [newTask, setnewTask] = React.useState('');
+  const [updateTask, setupdateTask] = React.useState('');
 
-  const retriveData = () => {
-    firestore.collection("tasks").orderBy('id', 'asc').onSnapshot(snapshot => {
-      console.log(snapshot)
-      let myTask = snapshot.docs.map(d => {
-        const { id, name } = d.data()
-        return { id, name }
-      })
-      setTasks(myTask)
-    })
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const db = firebase.firestore();
+      db.collection("tasks")
+            .onSnapshot(function(data) {
+              console.log(data)
+              setTasks(data.docs.map(doc => ({ ...doc.data(), id: doc.id })));
+            });
+     
+    };
+    fetchData();
+  }, []);
+
+  const onCreate = () => {
+    const db = firebase.firestore();
+    db.collection("tasks").add({ name: newTask });
+
+  };
+
+  function onDelete (id) {
+    const db = firebase.firestore()
+    db.collection('tasks').doc(id).delete()
   }
 
-
-
-
-  const renderTask = () => {
-    if (tasks && tasks.length) {
-      return tasks.map((task, index) => (
-        <Task key={index}
-          task={task}
-          deleteTask={deleteTask}
-          editTask={editTask}
-           />
-      )
-      )
-
-    } else {
-      return (<li>No task</li>)
-    }
+  const onUpdate = (id) => {
+    const db = firebase.firestore()
+    db.collection('tasks').doc(id).set({name:updateTask})
   }
 
-  const addTask = () => {
-    let id = (tasks.length === 0) ? 1 : tasks[tasks.length - 1].id + 1
-    firestore.collection("tasks").doc(id + '').set({ id, name })
-  }
-
-  const deleteTask = (id) => {
-    firestore.collection('tasks').doc(id + '').delete()
-  }
-
-  const editTask = (id) => {
-    firestore.collection('tasks').doc(id + '').set({ id, name })
-  }
-  
   return (
-    <div className='app-container'>
-      <h1 align = 'center'>Today's story</h1>
-      <h2 align = 'center'><input type="text" name="name" onChange={(e) => setName(e.target.value)} /> 
-      <button style={{ margin: '5px' }} onClick={addTask} >Submit</button> </h2>
-      <ul style={{ display: 'row' }} >{renderTask()}</ul>
+    <div>
+       <Navbar bg="dark" variant="dark">
+    <Navbar.Brand href="#home">
+      Salvando el semestre - Youtube Channel
+    </Navbar.Brand>
+  </Navbar>
+    <br></br>
+      <Container>
+        
+    <Row>
+    <Col>
+    <h2>ADD NEW Task </h2>
+    <Form>
+
+  <Form.Group controlId="formBasicCheckbox">
+  <Form.Control type="text"   value={newTask}  onChange={e => setnewTask(e.target.value)} />     
+  </Form.Group>
+  <Button variant="primary" onClick={onCreate}>Create Task</Button>
+</Form>
+   
+    </Col>
+    </Row>
+    <br></br>
+    <Row>
+      <Col>
+      <Table striped bordered hover variant="dark">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Task Name</th>
+      <th>Delete Task</th>
+      <th>Update Task</th>
+    </tr>
+  </thead>
+  <tbody>
+  
+      {tasks.map(spell => (
+        <tr key={spell.id } >
+          <td>{spell.id}</td>
+      <td >{spell.name}</td>
+          <td>  <Button variant="danger" onClick={() => onDelete(spell.id)}>Delete Task</Button></td>
+          <td>
+          <input  type="text" className=" "  placeholder={spell.name}  onChange={e => setupdateTask(e.target.value)} placeholder={spell.name}></input>
+          <Button className="text-white ml-4" variant="warning" onClick={() => onUpdate(spell.id)}>Update Task</Button>
+          </td>
+         </tr >
+      ))}
+    
+    
+  
+  </tbody>
+</Table>
+      
+      </Col>
+    </Row>
+    </Container>
+      
     </div>
   );
 }
