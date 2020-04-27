@@ -1,4 +1,4 @@
-background-color: #BB8FCE
+
 .App {
   text-align: center;
 }
@@ -28,7 +28,12 @@ background-color: #BB8FCE
 .App-link {
   color: #61dafb;
 }
-
+.monospace {
+  font-family: "Lucida Console", Courier, monospace;
+  font-size: 45px;
+  background-color: coral;
+  
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
+import Login from './components/Login';
 import firebase from "./firebase";
 
 import {Button,Row,Container,Col,Form,Navbar,Table} from 'react-bootstrap';
 
 function App() {
+  const [session, setSession] = useState({
+    isLoggedIn: false,
+    currenUser: null,
+    errorMessage: null
+  });
+  if(session.isLoggedIn){
+
+  }
 
   const [tasks, setTasks] = React.useState([]);
   const [newTask, setnewTask] = React.useState('');
@@ -26,7 +35,7 @@ function App() {
   const onCreate = () => {
     const db = firebase.firestore();
     db.collection("tasks").add({ name: newTask });
-
+    
   };
 
   function onDelete (id) {
@@ -41,37 +50,40 @@ function App() {
 
   return (
     <div>
-       <Navbar bg="dark" variant="dark">
+      {session.isLoggedIn ? (
+    <div><Navbar bg="dark" variant="dark">
     <Navbar.Brand href="#home">
-      Salvando el semestre - Youtube Channel
+      HOME
     </Navbar.Brand>
-  </Navbar>
+    <Navbar.Brand href="#ABOUT">
+      ABOUT
+    </Navbar.Brand>
+    </Navbar>
     <br></br>
-      <Container>
-        
+    <Container>
     <Row>
     <Col>
-    <h2>ADD NEW Task </h2>
+    <p class="monospace">Today's Story.</p>
     <Form>
-
-  <Form.Group controlId="formBasicCheckbox">
-  <Form.Control type="text"   value={newTask}  onChange={e => setnewTask(e.target.value)} />     
-  </Form.Group>
-  <Button variant="primary" onClick={onCreate}>Create Task</Button>
-</Form>
-   
+    <Form.Group controlId="formBasicCheckbox">
+    <Form.Control type="text"   value={newTask}  onChange={e => setnewTask(e.target.value)} />     
+    </Form.Group>
+    <Button variant="success" size="lg" block onClick={onCreate}>ADD</Button>
+    </Form>
     </Col>
     </Row>
     <br></br>
+    
     <Row>
       <Col>
-      <Table striped bordered hover variant="dark">
+      <Table striped bordered hover size="sm">
   <thead>
     <tr>
-      <th>ID</th>
-      <th>Task Name</th>
-      <th>Delete Task</th>
-      <th>Update Task</th>
+      <th>No</th>
+      <th>Story</th>
+      <th>Delete</th>
+      <th>Update</th>
+     
     </tr>
   </thead>
   <tbody>
@@ -79,11 +91,13 @@ function App() {
       {tasks.map(spell => (
         <tr key={spell.id } >
           <td>{spell.id}</td>
+
       <td >{spell.name}</td>
-          <td>  <Button variant="danger" onClick={() => onDelete(spell.id)}>Delete Task</Button></td>
+
+          <td>  <Button variant="outline-danger" onClick={() => onDelete(spell.id)}>Delete</Button></td>
           <td>
           <input  type="text" className=" "  placeholder={spell.name}  onChange={e => setupdateTask(e.target.value)} placeholder={spell.name}></input>
-          <Button className="text-white ml-4" variant="warning" onClick={() => onUpdate(spell.id)}>Update Task</Button>
+          <Button className="text-white ml-4" variant="outline-primary" onClick={() => onUpdate(spell.id)}>Update</Button>
           </td>
          </tr >
       ))}
@@ -95,8 +109,11 @@ function App() {
       
       </Col>
     </Row>
-    </Container>
-      
+    </Container></div>
+    ) : (
+      <Login setSession = {setSession}/>
+
+      )}
     </div>
   );
 }
