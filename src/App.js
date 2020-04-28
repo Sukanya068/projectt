@@ -1,19 +1,14 @@
 import React, { useState } from "react";
 import "./App.css";
-import Login from './components/Login';
+
 import firebase from "./firebase";
+//import LoginPage from './components/LoginPage'
+
 
 import {Button,Row,Container,Col,Form,Navbar,Table} from 'react-bootstrap';
 
 function App() {
-  const [session, setSession] = useState({
-    isLoggedIn: false,
-    currenUser: null,
-    errorMessage: null
-  });
-  if(session.isLoggedIn){
-
-  }
+  
 
   const [tasks, setTasks] = React.useState([]);
   const [newTask, setnewTask] = React.useState('');
@@ -26,6 +21,7 @@ function App() {
             .onSnapshot(function(data) {
               console.log(data)
               setTasks(data.docs.map(doc => ({ ...doc.data(), id: doc.id })));
+              
             });
      
     };
@@ -35,6 +31,8 @@ function App() {
   const onCreate = () => {
     const db = firebase.firestore();
     db.collection("tasks").add({ name: newTask });
+    
+   
     
   };
 
@@ -50,8 +48,7 @@ function App() {
 
   return (
     <div>
-      {session.isLoggedIn ? (
-    <div><Navbar bg="dark" variant="dark">
+    <Navbar bg="dark" variant="dark">
     <Navbar.Brand href="#home">
       HOME
     </Navbar.Brand>
@@ -63,7 +60,8 @@ function App() {
     <Container>
     <Row>
     <Col>
-    <p class="monospace">Today's Story.</p>
+    <p class="monospace" align = "center"> My DIARY 
+    <img src="https://lh3.googleusercontent.com/4voemWkUtUwsbjI9MivVgElvp_sH15u5HC2a2Gtbo8otw21Nhjnv8NhzfHXMJBmbuf0" height="100" width="100"></img> </p>
     <Form>
     <Form.Group controlId="formBasicCheckbox">
     <Form.Control type="text"   value={newTask}  onChange={e => setnewTask(e.target.value)} />     
@@ -109,11 +107,9 @@ function App() {
       
       </Col>
     </Row>
-    </Container></div>
-    ) : (
-      <Login setSession = {setSession}/>
+    </Container>
 
-      )}
+      
     </div>
   );
 }
