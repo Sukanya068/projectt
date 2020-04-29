@@ -1,18 +1,23 @@
 import React, { useState } from "react";
 import "./App.css";
 
+
 import firebase from "./firebase";
-//import LoginPage from './components/LoginPage'
+
 
 
 import {Button,Row,Container,Col,Form,Navbar,Table} from 'react-bootstrap';
 
 function App() {
+
+ 
   
 
   const [tasks, setTasks] = React.useState([]);
   const [newTask, setnewTask] = React.useState('');
   const [updateTask, setupdateTask] = React.useState('');
+
+ 
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -22,6 +27,7 @@ function App() {
               console.log(data)
               setTasks(data.docs.map(doc => ({ ...doc.data(), id: doc.id })));
               
+               
             });
      
     };
@@ -31,10 +37,7 @@ function App() {
   const onCreate = () => {
     const db = firebase.firestore();
     db.collection("tasks").add({ name: newTask });
-    
-   
-    
-  };
+    };
 
   function onDelete (id) {
     const db = firebase.firestore()
@@ -47,13 +50,16 @@ function App() {
   }
 
   return (
-    <div>
+    <div class="mo">
     <Navbar bg="dark" variant="dark">
     <Navbar.Brand href="#home">
       HOME
     </Navbar.Brand>
     <Navbar.Brand href="#ABOUT">
       ABOUT
+    </Navbar.Brand>
+    <Navbar.Brand href="https://web.facebook.com/ausukanya.123phewmoo">
+      Contact
     </Navbar.Brand>
     </Navbar>
     <br></br>
@@ -109,7 +115,7 @@ function App() {
     </Row>
     </Container>
 
-      
+     
     </div>
   );
 }
