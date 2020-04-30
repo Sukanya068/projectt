@@ -1,24 +1,13 @@
 import React, { useState } from "react";
 import "./App.css";
-
-
 import firebase from "./firebase";
-
-
-
 import {Button,Row,Container,Col,Form,Navbar,Table} from 'react-bootstrap';
 
 function App() {
-
- 
-  
-
   const [tasks, setTasks] = React.useState([]);
   const [newTask, setnewTask] = React.useState('');
   const [updateTask, setupdateTask] = React.useState('');
-
  
-
   React.useEffect(() => {
     const fetchData = async () => {
       const db = firebase.firestore();
@@ -26,9 +15,7 @@ function App() {
             .onSnapshot(function(data) {
               console.log(data)
               setTasks(data.docs.map(doc => ({ ...doc.data(), id: doc.id })));
-              
-               
-            });
+              });
      
     };
     fetchData();
@@ -83,14 +70,18 @@ function App() {
       <Table striped bordered hover size="sm">
   <thead>
     <tr>
+    
       <th>No</th>
       <th>Story</th>
       <th>Delete</th>
       <th>Update</th>
+      <th>Done</th>
+      
      
     </tr>
   </thead>
   <tbody>
+    
   
       {tasks.map(spell => (
         <tr key={spell.id } >
@@ -103,6 +94,8 @@ function App() {
           <input  type="text" className=" "  placeholder={spell.name}  onChange={e => setupdateTask(e.target.value)} placeholder={spell.name}></input>
           <Button className="text-white ml-4" variant="outline-primary" onClick={() => onUpdate(spell.id)}>Update</Button>
           </td>
+          <td> <Form.Check aria-label="option 1" /></td>
+          
          </tr >
       ))}
     
